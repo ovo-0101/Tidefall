@@ -175,11 +175,13 @@ Tidefall/
 
 ## 署名
 
+Required Notice: Tidefall SQL architecture and panel by Vael & Kael (GitHub: Vael-KY). Based on Eventide by Chuli (@chuli1122).
+
 面板底部的 `DESIGNED BY V & K` 为本项目前端的署名标识。
 
-根据 PolyForm Noncommercial License 的 Notices 条款，分发或部署本项目时请保留该署名。
+根据 PolyForm Noncommercial License 的 Notices 条款，分发或部署本项目时需保留该署名。
 
-你可以在署名旁添加自己的名字（如 `DESIGNED BY V & K · customized by xxx`），但请不要移除原始署名。
+你可以在署名旁添加自己的名字（如 `DESIGNED BY V & K · customized by xxx`），但禁止移除原始署名。
 
 对你有帮助的话，加个星标就好！
 

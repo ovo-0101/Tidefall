@@ -181,6 +181,8 @@ Tidefall/
 
 你可以在署名旁添加自己的名字（如 `DESIGNED BY V & K · customized by xxx`），但请不要移除原始署名。
 
+对你有帮助的话，加个星标就好！
+
 ## 致谢
 
 - [Eventide](https://github.com/chuli1122/Eventide) by Chuli — 原始概念、周期设计、事件分类、数值体系、梦境系统

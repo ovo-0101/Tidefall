@@ -258,9 +258,9 @@ async function fetchSnapshots(){
 
 async function fetchEventLog(){
   if(!sb)return;
-  var res=await sb.from('eventide_event_log').select('event_key,started_at,ended_at').eq('assistant_id',ASSISTANT_ID).order('ended_at',{ascending:false}).limit(8);
+  var res=await sb.from('eventide_event_log').select('event_key,cycle_key,flavor,created_at').eq('assistant_id',ASSISTANT_ID).order('created_at',{ascending:false}).limit(8);
   var data=res.data;if(!data||data.length===0){document.getElementById('eventLog').textContent='暂无记录';return}
-  var html='';data.forEach(function(d){var s=new Date(d.started_at);var e=new Date(d.ended_at);var fmt=function(t){return(t.getMonth()+1)+'/'+t.getDate()+' '+String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0')};html+='<div>◈ '+(eventLabels[d.event_key]||d.event_key)+' <span style="opacity:0.5">'+fmt(s)+' → '+fmt(e)+'</span></div>'});
+  var html='';data.forEach(function(d){var s=new Date(d.created_at);var e=new Date(d.created_at);var fmt=function(t){return(t.getMonth()+1)+'/'+t.getDate()+' '+String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0')};html+='<div>◈ '+(eventLabels[d.event_key]||d.event_key)+' <span style="opacity:0.5">'+fmt(s)+' (第'+d.cycle_key+'周期)'+'</span></div>'});
   document.getElementById('eventLog').innerHTML=html;
 }
 

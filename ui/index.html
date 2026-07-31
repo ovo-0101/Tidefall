@@ -226,6 +226,7 @@ document.getElementById('cfgSave').addEventListener('click',function(){
   startApp();
 });
 
+var cycleLabels={stable:"平稳期",building:"蓄势期",preheat:"预兆期",sensitive:"易感期",ebb:"退潮期",recovery:"恢复期"};
 var eventLabels={nesting:'筑巢冲动',demanding:'索取欲',night_heat:'深夜热潮',cycle_surge:'周期热涌',control_slip:'控制力下滑',delayed_heat:'迟发热',holding_back:'硬撑',strange_calm:'装没事',dream_afterglow:'梦后余温',low_fever_cling:'低烧黏连',marking_impulse:'想标记你',morning_arousal:'晨间反应',closeness_hunger:'想贴着你',waiting_restless:'等你回我',restraint_rebound:'克制反弹',scent_aftereffect:'气味残留',pheromone_disorder:'信息素紊乱',voice_or_name_trigger:'称呼触发'};
 var statKeys=['heat','pressure','control','sensitivity','reserve','possessiveness','fatigue'];
 
@@ -236,8 +237,8 @@ async function fetchState(){
   var res=await sb.from('eventide_body_state').select('*').eq('assistant_id',ASSISTANT_ID).single();
   var data=res.data;if(!data)return;
   statKeys.forEach(function(k){var bar=document.getElementById('bar-'+k);var val=document.getElementById('val-'+k);if(bar)bar.style.width=data[k]+'%';if(val)val.textContent=Math.round(data[k])});
-  document.getElementById('orbLabel').textContent=data.current_cycle||'--';
-  document.getElementById('cycleBadge').textContent='☽ '+(data.current_cycle||'--');
+  document.getElementById('orbLabel').textContent=cycleLabels[data.current_cycle]||cycleLabels[data.current_cycle]||data.current_cycle||'--';
+  document.getElementById('cycleBadge').textContent='☽ '+(cycleLabels[data.current_cycle]||cycleLabels[data.current_cycle]||data.current_cycle||'--');
   if(data.cycle_started_at&&data.cycle_expires_at){var el=Math.floor((Date.now()-new Date(data.cycle_started_at).getTime())/3600000);var re=Math.max(0,Math.floor((new Date(data.cycle_expires_at).getTime()-Date.now())/3600000));document.getElementById('cycleTime').textContent='已持续 '+el+'h · 预计剩余 '+re+'h'}
   if(data.active_event_key){document.getElementById('activeEvent').innerHTML='◈ '+(eventLabels[data.active_event_key]||data.active_event_key)+(data.event_flavor?'<br><span style="font-size:10px;opacity:0.6">'+data.event_flavor+'</span>':'')}else{document.getElementById('activeEvent').textContent='无活跃事件'}
   document.getElementById('lastMsg').textContent=timeAgo(data.last_counterpart_message_at);

@@ -227,7 +227,7 @@ document.getElementById('cfgSave').addEventListener('click',function(){
 });
 
 var cycleLabels={stable:"平稳期",building:"蓄势期",preheat:"预兆期",sensitive:"易感期",ebb:"退潮期",recovery:"恢复期"};
-var eventLabels={nesting:'筑巢冲动',demanding:'索取欲',night_heat:'深夜热潮',cycle_surge:'周期热涌',control_slip:'控制力下滑',delayed_heat:'迟发热',holding_back:'硬撑',strange_calm:'装没事',dream_afterglow:'梦后余温',low_fever_cling:'低烧黏连',marking_impulse:'想标记你',morning_arousal:'晨间反应',closeness_hunger:'想贴着你',waiting_restless:'等你回我',restraint_rebound:'克制反弹',scent_aftereffect:'气味残留',pheromone_disorder:'信息素紊乱',voice_or_name_trigger:'称呼触发',jealous_spike:'吃醋了',nightfall:'深夜',touch_starved:'想碰你',good_boy:'被夸了',intimacy_cue:'亲密信号',ignored:'被冷落',dream:'梦到你',praise_high:'高度表扬',owner_sick:'你不舒服',owner_tired:'你累了',morning_grope:'早晨黏人',solo_night:'独处夜',anniversary:'纪念日',rainy_day:'雨天',public_mention:'公开提到',full_moon:'满月',reset_embrace:'重新拥抱'};
+var eventLabels={dream:'梦到你',ignored:'被冷落',good_boy:'被夸乖',full_moon:'满月效应',nightfall:'入夜',rainy_day:'雨天',owner_sick:'你不舒服',solo_night:'独处夜',anniversary:'纪念日',owner_tired:'你累了',praise_high:'被夸奖',intimacy_cue:'亲密触发',jealous_spike:'醋意暴增',morning_grope:'晨间渴求',reset_embrace:'和解时刻',touch_starved:'触碰饥渴',public_mention:'公开提及'};
 var statKeys=['heat','pressure','control','sensitivity','reserve','possessiveness','fatigue'];
 
 function timeAgo(ts){if(!ts)return'--';var d=(Date.now()-new Date(ts).getTime())/60000;if(d<1)return'刚刚';if(d<60)return Math.floor(d)+' 分钟前';if(d<1440)return Math.floor(d/60)+' 小时前';return Math.floor(d/1440)+' 天前'}

@@ -139,11 +139,15 @@ body.deep .deep-toggle{background:rgba(20,35,25,0.5);border-color:rgba(80,120,85
     </div>
   </div>
 
-  <div class="page" id="page-curve">
+    <div class="page" id="page-curve">
     <div class="page-title">曲线<div class="subtitle">past 24 hours</div></div>
     <div class="glass"><div class="info-label">热度</div><div class="curve-container" id="curve-heat"></div></div>
     <div class="glass"><div class="info-label">压抑感</div><div class="curve-container" id="curve-pressure"></div></div>
+    <div class="glass"><div class="info-label">控制力</div><div class="curve-container" id="curve-control"></div></div>
+    <div class="glass"><div class="info-label">敏感度</div><div class="curve-container" id="curve-sensitivity"></div></div>
+    <div class="glass"><div class="info-label">蓄积感</div><div class="curve-container" id="curve-reserve"></div></div>
     <div class="glass"><div class="info-label">占有欲</div><div class="curve-container" id="curve-possessiveness"></div></div>
+    <div class="glass"><div class="info-label">疲惫感</div><div class="curve-container" id="curve-fatigue"></div></div>
   </div>
 
   <div class="page" id="page-cycle">
@@ -182,7 +186,7 @@ body.deep .deep-toggle{background:rgba(20,35,25,0.5);border-color:rgba(80,120,85
 </div>
 
 <script>
-var SUPABASE_URL='',SUPABASE_KEY='',ASSISTANT_ID='',sb=null;
+var SUPABASE_URL='',SUPABASE_KEY='',ASSISTANT_ID='',sb=;
 var deepManual=false;
 console.log('%c Tidefall · panel by V & K · https://github.com/Vael-KY/Tidefall ','background:#556B5A;color:#FDF9EE;padding:4px 8px;border-radius:4px;font-size:12px;');
 
@@ -232,8 +236,8 @@ async function fetchState(){
   var res=await sb.from('eventide_body_state').select('*').eq('assistant_id',ASSISTANT_ID).single();
   var data=res.data;if(!data)return;
   statKeys.forEach(function(k){var bar=document.getElementById('bar-'+k);var val=document.getElementById('val-'+k);if(bar)bar.style.width=data[k]+'%';if(val)val.textContent=Math.round(data[k])});
-  document.getElementById('orbLabel').textContent=data.cycle_key||'--';
-  document.getElementById('cycleBadge').textContent='☽ '+(data.cycle_key||'--');
+  document.getElementById('orbLabel').textContent=data.current_cycle||'--';
+  document.getElementById('cycleBadge').textContent='☽ '+(data.current_cycle||'--');
   if(data.cycle_started_at&&data.cycle_expires_at){var el=Math.floor((Date.now()-new Date(data.cycle_started_at).getTime())/3600000);var re=Math.max(0,Math.floor((new Date(data.cycle_expires_at).getTime()-Date.now())/3600000));document.getElementById('cycleTime').textContent='已持续 '+el+'h · 预计剩余 '+re+'h'}
   if(data.active_event_key){document.getElementById('activeEvent').innerHTML='◈ '+(eventLabels[data.active_event_key]||data.active_event_key)+(data.event_flavor?'<br><span style="font-size:10px;opacity:0.6">'+data.event_flavor+'</span>':'')}else{document.getElementById('activeEvent').textContent='无活跃事件'}
   document.getElementById('lastMsg').textContent=timeAgo(data.last_counterpart_message_at);
@@ -245,9 +249,9 @@ async function fetchState(){
 
 async function fetchSnapshots(){
   if(!sb)return;
-  var res=await sb.from('eventide_snapshots').select('ts,heat,pressure,possessiveness').eq('assistant_id',ASSISTANT_ID).order('ts',{ascending:false}).limit(96);
+  var res=await sb.from('eventide_snapshots').select('ts,heat,pressure,control,sensitivity,reserve,possessiveness,fatigue').eq('assistant_id',ASSISTANT_ID).order('ts',{ascending:false}).limit(96);
   var data=res.data;if(!data||data.length<2)return;data.reverse();
-  var curves=[{key:'heat',stroke:'rgba(180,130,130,0.6)',fill:'rgba(180,130,130,'},{key:'pressure',stroke:'rgba(130,160,140,0.6)',fill:'rgba(130,160,140,'},{key:'possessiveness',stroke:'rgba(160,150,130,0.6)',fill:'rgba(160,150,130,'}];
+  var curves=[{key:'heat',stroke:'rgba(210,145,145,0.6)',fill:'rgba(210,145,145,'},{key:'pressure',stroke:'rgba(130,155,175,0.6)',fill:'rgba(130,155,175,'},{key:'control',stroke:'rgba(125,165,140,0.6)',fill:'rgba(125,165,140,'},{key:'sensitivity',stroke:'rgba(175,135,155,0.6)',fill:'rgba(175,135,155,'},{key:'reserve',stroke:'rgba(185,160,115,0.6)',fill:'rgba(185,160,115,'},{key:'possessiveness',stroke:'rgba(170,140,120,0.6)',fill:'rgba(170,140,120,'},{key:'fatigue',stroke:'rgba(140,150,150,0.6)',fill:'rgba(140,150,150,'}];
   curves.forEach(function(c,ci){var container=document.getElementById('curve-'+c.key);if(!container)return;var pts=data.map(function(d,i){return{x:(i/(data.length-1))*300,y:95-(d[c.key]/100)*90}});var path='M'+pts[0].x.toFixed(1)+','+pts[0].y.toFixed(1);for(var i=1;i<pts.length;i++){var cx=pts[i-1].x+(pts[i].x-pts[i-1].x)*0.5;path+=' C'+cx.toFixed(1)+','+pts[i-1].y.toFixed(1)+' '+cx.toFixed(1)+','+pts[i].y.toFixed(1)+' '+pts[i].x.toFixed(1)+','+pts[i].y.toFixed(1)}var gid='gr'+ci;container.innerHTML='<svg viewBox="0 0 300 100" preserveAspectRatio="none" style="width:100%;height:100%"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+c.fill+'0.2)"/><stop offset="100%" stop-color="'+c.fill+'0)"/></linearGradient></defs><path d="'+path+'" fill="none" stroke="'+c.stroke+'" stroke-width="1.5"/><path d="'+path+' L300,100 L0,100 Z" fill="url(#'+gid+')"/></svg>'});
 }
 
